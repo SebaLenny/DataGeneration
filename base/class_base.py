@@ -11,8 +11,9 @@ class ClassBase:
                  reference_class: type,
                  count: int) -> None:
         self.model_base: ModelBase = model_base
+        self.model_base.append_class(self)
         self.fields: list[FieldBase] = []
-        self.reference_class: type = reference_class
+        self.reference_class: type = reference_class # silly debuger behaviour - it's treated as class var.
         self.instances = []
         self.count: int = count
 
@@ -21,7 +22,6 @@ class ClassBase:
 
     def append_field(self, field: FieldBase):
         self.fields.append(field)
-        field.class_base = self
 
     def create_instance(self):
         new = self.reference_class()

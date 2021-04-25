@@ -5,7 +5,6 @@ class GeneratorBase():
     def __init__(self,
                  blank_procentage: float) -> None:
         self.blank_procentage: float = blank_procentage
-        self.field_base: FieldBase = None
 
-    def generate_data(self):
-        pass
+    def generate_data(self, related_fields_values: dict = {}):
+        return None

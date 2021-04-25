@@ -14,7 +14,7 @@ class UniformDistributionGen(GeneratorBase):
         self.max = max
         self.decimals = decimanls
 
-    def generate_data(self):
+    def generate_data(self, related_fields_values: dict = {}):
         if np.random.rand() < self.blank_procentage:
             return None
         to_ret = np.random.uniform(min, max)
