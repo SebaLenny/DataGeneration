@@ -4,9 +4,9 @@ import numpy as np
 
 class NormalDistributionGen(GeneratorBase):
     def __init__(self,
-                 blank_procentage: float,
                  mean: float,
                  std: float,
+                 blank_procentage: float = 0,
                  decimanls: int = None) -> None:
         super().__init__(blank_procentage)
         self.mean = mean

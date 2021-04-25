@@ -6,8 +6,8 @@ import random
 
 class RandomRelationGen(RelationGeneratorBase):
     def __init__(self,
-                 blank_procentage: float,
                  related_class: ClassBase,
+                 blank_procentage: float = 0,
                  duplicate_check_chance: float = 1,
                  duplicate_repeats: int = 5) -> None:
         super().__init__(blank_procentage, related_class)

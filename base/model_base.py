@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 class ModelBase():
     def __init__(self) -> None:
         self.classes: List[ClassBase] = []
-        self._fields_graph = nx.DiGraph()
+        self.fields_graph = nx.DiGraph()
+        self.reverse_topological_order: list[FieldBase] = []
         self.seed: int = None
 
     def append_class(self, class_base: ClassBase):
@@ -21,15 +22,19 @@ class ModelBase():
     def map_field_graph(self):
         fields = self.get_all_fields()
         for field in fields:
-            self._fields_graph.add_node(field.class_field_str(), field=field)
+            self.fields_graph.add_node(field.class_field_str(), field=field)
         for field in fields:
             for end_field in field.get_end_fields():
-                self._fields_graph.add_edge(
+                self.fields_graph.add_edge(
                     field.class_field_str(), end_field.class_field_str())
+        topological_order = list(
+            reversed(list(nx.topological_sort(self.fields_graph))))
+        for field_key in topological_order:
+            self.reverse_topological_order.append(
+                self.fields_graph.nodes[field_key]['field'])
 
     def draw_field_graph(self):
-        print(list(reversed(list(nx.topological_sort(self._fields_graph)))))
-        nx.draw(self._fields_graph, with_labels=True, font_weight='bold',
+        nx.draw(self.fields_graph, with_labels=True, font_weight='bold',
                 node_size=200, node_color="#b5c6ff")
         plt.show()
 
@@ -39,3 +44,8 @@ class ModelBase():
             for field_base in class_base.fields:
                 fields.append(field_base)
         return fields
+
+    def fill_in_instances(self):
+        for field in self.reverse_topological_order:
+            for instance in field.class_base.instances:
+                field.fill_in_field(instance)

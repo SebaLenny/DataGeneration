@@ -5,9 +5,9 @@ import math
 
 class UniformDistributionGen(GeneratorBase):
     def __init__(self,
-                 blank_procentage: float,
                  min: float,
                  max: float,
+                 blank_procentage: float = 0,
                  decimanls: int = None) -> None:
         super().__init__(blank_procentage)
         self.min = min
