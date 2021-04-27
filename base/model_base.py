@@ -3,6 +3,7 @@ from typing import List
 from base.class_base import ClassBase
 import networkx as nx
 import matplotlib.pyplot as plt
+import json
 
 
 class ModelBase():

@@ -51,6 +51,8 @@ class FieldBase():
             class_base = field_base.generator.related_class
 
     def fill_in_field(self, instance):
+        if self.generator is None:
+            return
         related_fields_values = {}
         for related_field in self._related_fields:
             try:
@@ -59,7 +61,7 @@ class FieldBase():
             except Exception:
                 related_fields_values[related_field] = None
         setattr(instance, self.field,
-                self.generator.generate_data(related_fields_values))
+                self.generator.generate_data(related_fields_values, instance=instance))
 
     def class_field_str(self):
         return f"{self.class_base.reference_class.__name__}.{self.field}"

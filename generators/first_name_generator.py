@@ -9,7 +9,7 @@ class FirstNameGenerator(GeneratorBase):
         super().__init__(blank_procentage)
         self.fake = Faker()
 
-    def generate_data(self, related_fields_values: dict):
+    def generate_data(self, related_fields_values: dict, instance=None):
         if np.random.rand() < self.blank_procentage:
             return None
         _ = [x for x in related_fields_values.keys() if "gender" in x.lower()]

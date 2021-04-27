@@ -12,7 +12,7 @@ class RegexGenerator(GeneratorBase):
         super().__init__(blank_procentage)
         self.regex = regex
 
-    def generate_data(self, related_fields_values: dict):
+    def generate_data(self, related_fields_values: dict, instance=None):
         if np.random.rand() < self.blank_procentage:
             return None
         return exrex.getone(self.regex)

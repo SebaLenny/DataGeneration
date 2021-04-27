@@ -1,6 +1,7 @@
 from __future__ import annotations
 from base.field_base import FieldBase
 from typing import TYPE_CHECKING
+import jsonpickle
 if TYPE_CHECKING:
     from base.model_base import ModelBase
 
@@ -13,7 +14,8 @@ class ClassBase:
         self.model_base: ModelBase = model_base
         self.model_base.append_class(self)
         self.fields: list[FieldBase] = []
-        self.reference_class: type = reference_class # silly debuger behaviour - it's treated as class var.
+        # silly debuger behaviour - it's treated as class var.
+        self.reference_class: type = reference_class
         self.instances = []
         self.count: int = count
 
@@ -38,3 +40,7 @@ class ClassBase:
         for instance in self.instances:
             for field in self.fields:
                 field.fill_in_field(instance)
+
+    def json_dump(self):
+        with open(f"{self.reference_class.__name__}.json", "w") as fw:
+            fw.write(jsonpickle.encode(self.instances))

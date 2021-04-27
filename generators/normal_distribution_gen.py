@@ -13,7 +13,7 @@ class NormalDistributionGen(GeneratorBase):
         self.std = std
         self.decimals = decimanls
 
-    def generate_data(self, related_fields_values: dict = {}):
+    def generate_data(self, related_fields_values: dict = {}, instance=None):
         if np.random.rand() < self.blank_procentage:
             return None
         to_ret = np.random.normal(self.mean, self.std)

@@ -1,0 +1,6 @@
+jsonpickle 
+Faker
+numpy
+networkx
+matplotlib
+faker
