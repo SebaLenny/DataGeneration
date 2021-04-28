@@ -6,8 +6,8 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: user
-      POSTGRES_DB: test
+      POSTGRES_PASSWORD: superpass
+      POSTGRES_DB: datagen
     ports:
       - 5432:5432
 
