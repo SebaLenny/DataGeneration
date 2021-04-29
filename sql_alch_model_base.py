@@ -1,7 +1,7 @@
 from generators.universal_function_generator import UniversalFunctionGenerator
 from generators.company_name_generator import CompanyNameGenerator
 from generators.date_generator import DateGenerator
-from base.sqlalchemy_class_base import SqlAlchemyModelBase
+from base.sqlalchemy_model_base import SqlAlchemyModelBase
 from generators.uniform_distribution_gen import UniformDistributionGen
 from generators.random_relation_gen import RandomRelationGen
 from base.field_base import FieldBase
@@ -64,6 +64,7 @@ if __name__ == "__main__":
                                 port="5432",
                                 declarative_base=base)
 
+    # Company
     cb_company = ClassBase(model, Company, 50)
     FieldBase(cb_company, CompanyNameGenerator(), "name")
     FieldBase(cb_company, UniversalFunctionGenerator(f=fake.city), "city")
