@@ -41,6 +41,8 @@ class ClassBase:
             for field in self.fields:
                 field.fill_in_field(instance)
 
-    def json_dump(self):
-        with open(f"{self.reference_class.__name__}.json", "w") as fw:
+    def json_dump(self, output: str):
+        if output is None:
+            output = f"{self.reference_class.__name__}.json"
+        with open(output, "w") as fw:
             fw.write(jsonpickle.encode(self.instances))

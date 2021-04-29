@@ -7,11 +7,11 @@ class NormalDistributionGen(GeneratorBase):
                  mean: float,
                  std: float,
                  blank_procentage: float = 0,
-                 decimanls: int = None) -> None:
+                 decimals: int = None) -> None:
         super().__init__(blank_procentage)
         self.mean = mean
         self.std = std
-        self.decimals = decimanls
+        self.decimals = decimals
 
     def generate_data(self, related_fields_values: dict = {}, instance=None):
         if np.random.rand() < self.blank_procentage:

@@ -1,3 +1,6 @@
+from generators.universal_function_generator import UniversalFunctionGenerator
+from generators.company_name_generator import CompanyNameGenerator
+from generators.date_generator import DateGenerator
 from base.sqlalchemy_class_base import SqlAlchemyModelBase
 from generators.uniform_distribution_gen import UniformDistributionGen
 from generators.random_relation_gen import RandomRelationGen
@@ -10,10 +13,21 @@ from typing import ClassVar, List
 from base.model_base import ModelBase
 from base.class_base import ClassBase
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Integer, ForeignKey, Float
+from sqlalchemy import Column, String, Integer, ForeignKey, Float, DateTime
 from sqlalchemy.orm import relationship
+from faker import Faker
 
 base = declarative_base()
+
+
+class Company(base):
+    __tablename__ = "Company"
+    company_id = Column(Integer, primary_key=True)
+    name = Column(String)
+    city = Column(String)
+    street_address = Column(String)
+    company_mission = Column(String)
+    workers = relationship("Person", back_populates="company")
 
 
 class Person(base):
@@ -21,9 +35,12 @@ class Person(base):
     person_id = Column(Integer, primary_key=True)
     first_name = Column(String)
     last_name = Column(String)
+    birth_date = Column(DateTime)
     gender = Column(String)
     salary = Column(Float)
     cars = relationship("Car", back_populates="owner")
+    company_id = Column(Integer, ForeignKey("Company.company_id"))
+    company = relationship("Company", back_populates="workers")
 
 
 class Car(base):
@@ -31,10 +48,14 @@ class Car(base):
     car_id = Column(Integer, primary_key=True)
     owner_id = Column(Integer, ForeignKey("Person.person_id"))
     owner = relationship("Person", back_populates="cars")
+    production_date = Column(DateTime)
     brand = Column(String)
 
 
 if __name__ == "__main__":
+    # "docker-compose up" the docker-compose.yml file to start database
+    fake = Faker()
+
     model = SqlAlchemyModelBase(dialect="postgresql",
                                 database="datagen",
                                 username="postgres",
@@ -43,16 +64,27 @@ if __name__ == "__main__":
                                 port="5432",
                                 declarative_base=base)
 
+    cb_company = ClassBase(model, Company, 50)
+    FieldBase(cb_company, CompanyNameGenerator(), "name")
+    FieldBase(cb_company, UniversalFunctionGenerator(f=fake.city), "city")
+    FieldBase(cb_company, UniversalFunctionGenerator(
+        f=fake.street_address), "street_address")
+    FieldBase(cb_company, UniversalFunctionGenerator(
+        f=fake.paragraph, nb_sentences=5), "company_mission")
+
     # Person
     cb_person = ClassBase(model, Person, 10000)
     FieldBase(cb_person, FirstNameGenerator(),
               "first_name", related_fields=["gender"])
     FieldBase(cb_person, LastNameGenerator(), "last_name")
+    FieldBase(cb_person, DateGenerator("-50y", "-18y"), "birth_date")
     FieldBase(cb_person, WeightedPickGenerator(
         choices=["Male", "Female"], weights=[0.4, 0.6]), "gender")
     FieldBase(
-        cb_person, NormalDistributionGen(mean=3000, std=1500, decimanls=2, blank_procentage=.15), "salary")
+        cb_person, NormalDistributionGen(mean=3000, std=1500, decimals=2, blank_procentage=.15), "salary")
     p_cars = FieldBase(cb_person, None, "cars")
+    FieldBase(cb_person, RandomRelationGen(
+        cb_company), "company")
 
     # CAR
     cb_car = ClassBase(model, Car, 100000)
@@ -60,10 +92,10 @@ if __name__ == "__main__":
         cb_person, reverse_relation_field=p_cars), "owner")
     FieldBase(cb_car, WeightedPickGenerator(
         ["VW", "Audi", "Seat", "Skoda"]), "brand")
+    FieldBase(cb_car, DateGenerator("-30y", "-5y"), "production_date")
 
-    model.create_instances()
-    model.map_field_graph()
-    model.draw_field_graph()
-    model.fill_in_instances()
+    # model.create_instances()
+    # model.map_field_graph()
+    # model.fill_in_instances()
+    model.generate_data()
     model.save_to_db()
-    print("")

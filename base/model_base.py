@@ -50,3 +50,8 @@ class ModelBase():
         for field in self.reverse_topological_order:
             for instance in field.class_base.instances:
                 field.fill_in_field(instance)
+    
+    def generate_data(self):
+        self.create_instances()
+        self.map_field_graph()
+        self.fill_in_instances()
