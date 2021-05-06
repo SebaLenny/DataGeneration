@@ -5,3 +5,5 @@ networkx
 matplotlib
 faker
 psycopg2
+SQLAlchemy
+SQLAlchemy-serializer

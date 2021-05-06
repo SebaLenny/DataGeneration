@@ -46,3 +46,6 @@ class ClassBase:
             output = f"{self.reference_class.__name__}.json"
         with open(output, "w") as fw:
             fw.write(jsonpickle.encode(self.instances))
+    
+    def clear_instances(self):
+        self.instances = []

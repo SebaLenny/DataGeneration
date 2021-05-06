@@ -21,6 +21,7 @@ class ModelBase():
             b_class.create_instances(b_class.count)
 
     def map_field_graph(self):
+        self.fields_graph = nx.DiGraph()
         fields = self.get_all_fields()
         for field in fields:
             self.fields_graph.add_node(field.class_field_str(), field=field)
@@ -50,7 +51,7 @@ class ModelBase():
         for field in self.reverse_topological_order:
             for instance in field.class_base.instances:
                 field.fill_in_field(instance)
-    
+
     def generate_data(self):
         self.create_instances()
         self.map_field_graph()

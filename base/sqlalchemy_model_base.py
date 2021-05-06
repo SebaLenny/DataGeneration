@@ -41,3 +41,14 @@ class SqlAlchemyModelBase(ModelBase):
         for class_base in self.classes:
             session.add_all(class_base.instances)
         session.commit()
+
+    def clear_instances(self):
+        for b_class in self.classes:
+            b_class.clear_instances()
+
+    def generate_data_batches(self, batches: int):
+        for _ in range(batches):
+            print(f"{_+1} batch out of {batches}")
+            self.generate_data()
+            self.save_to_db()
+            self.clear_instances()
