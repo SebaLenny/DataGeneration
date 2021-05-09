@@ -1,6 +1,5 @@
 import numpy as np
 from base.generator_base import GeneratorBase
-from faker import Faker
 
 
 class UniversalFunctionGenerator(GeneratorBase):
@@ -9,7 +8,6 @@ class UniversalFunctionGenerator(GeneratorBase):
                  blank_procentage: float = 0,
                  **kwargs,) -> None:
         super().__init__(blank_procentage)
-        self.fake = Faker()
         self.f = f
         self.kwargs = kwargs
 

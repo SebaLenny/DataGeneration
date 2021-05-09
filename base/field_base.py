@@ -24,9 +24,6 @@ class FieldBase():
             self._related_attrgetters[relatd_field] = operator.attrgetter(
                 relatd_field)
 
-    def get_seed(self):
-        return self.class_base.get_seed()
-
     def get_end_fields(self) -> List[FieldBase]:
         end_fields = []
         for related_field in self._related_fields:

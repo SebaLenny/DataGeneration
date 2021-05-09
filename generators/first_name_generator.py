@@ -12,9 +12,9 @@ class FirstNameGenerator(GeneratorBase):
     def generate_data(self, related_fields_values: dict, instance=None):
         if np.random.rand() < self.blank_procentage:
             return None
-        _ = [x for x in related_fields_values.keys() if "gender" in x.lower()]
-        if len(_) > 0:
-            key = _[0]
+        temp = [x for x in related_fields_values.keys() if "gender" in x.lower()]
+        if len(temp) > 0:
+            key = temp[0]
             gender = related_fields_values[key].lower()
             if "male" == gender or "m" == gender:
                 return self.fake.first_name_male()

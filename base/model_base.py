@@ -11,7 +11,6 @@ class ModelBase():
         self.classes: List[ClassBase] = []
         self.fields_graph = nx.DiGraph()
         self.reverse_topological_order: list[FieldBase] = []
-        self.seed: int = None
 
     def append_class(self, class_base: ClassBase):
         self.classes.append(class_base)
