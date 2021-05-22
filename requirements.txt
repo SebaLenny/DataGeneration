@@ -7,3 +7,4 @@ faker
 psycopg2
 SQLAlchemy
 SQLAlchemy-serializer
+flask

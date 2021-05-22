@@ -28,6 +28,8 @@ class ModelBase():
             for end_field in field.get_end_fields():
                 self.fields_graph.add_edge(
                     field.class_field_str(), end_field.class_field_str())
+        if not nx.is_directed_acyclic_graph(self.fields_graph):
+            raise Exception("Field relations do not form Directed Acyclic Graph (DAG), check if relations are not forming cycles.")
         topological_order = list(
             reversed(list(nx.topological_sort(self.fields_graph))))
         for field_key in topological_order:

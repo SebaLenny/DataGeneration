@@ -2,7 +2,7 @@ import jsonpickle
 from generators.universal_function_generator import UniversalFunctionGenerator
 from generators.company_name_generator import CompanyNameGenerator
 from generators.date_generator import DateGenerator
-from base.sqlalchemy_model_base import SqlAlchemyModelBase
+from models.sqlalchemy_model_base import SqlAlchemyModelBase
 from generators.uniform_distribution_gen import UniformDistributionGen
 from generators.random_relation_gen import RandomRelationGen
 from base.field_base import FieldBase

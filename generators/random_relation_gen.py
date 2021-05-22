@@ -1,5 +1,5 @@
 from base.field_base import FieldBase
-from base.relation_generator_base import RelationGeneratorBase
+from generators.relation_generator_base import RelationGeneratorBase
 from base.class_base import ClassBase
 import numpy as np
 import random

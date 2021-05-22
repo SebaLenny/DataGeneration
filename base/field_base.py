@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import List, TYPE_CHECKING
-import base
+import generators
 import operator
 if TYPE_CHECKING:
-    from base.relation_generator_base import RelationGeneratorBase
+    from generators.relation_generator_base import RelationGeneratorBase
     from base.class_base import ClassBase
     from base.generator_base import GeneratorBase
 
@@ -42,7 +42,7 @@ class FieldBase():
             field_base = field_base_find[0]
             if split_field == split[-1]:
                 return field_base  # end field base found
-            if not issubclass(field_base.generator.__class__, base.relation_generator_base.RelationGeneratorBase):
+            if not issubclass(field_base.generator.__class__, generators.relation_generator_base.RelationGeneratorBase):
                 raise Exception(
                     f"{split_field}\'s does not have generator of RelationGeneratorBase sublcass")
             class_base = field_base.generator.related_class
@@ -57,8 +57,11 @@ class FieldBase():
                     instance)
             except Exception:
                 related_fields_values[related_field] = None
-        setattr(instance, self.field,
-                self.generator.generate_data(related_fields_values, instance=instance))
+        setattr(instance, self.field, self.prepare_field_value(
+            related_fields_values, instance))
+
+    def prepare_field_value(self, related_fields_values, instance):
+        return self.generator.generate_data(related_fields_values, instance=instance)
 
     def class_field_str(self):
         return f"{self.class_base.reference_class.__name__}.{self.field}"
