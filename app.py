@@ -35,7 +35,7 @@ def generate_people(N: str):
         mean=5000, std=1000, decimals=2), "salary")
 
     model.create_instances()
-    model.map_field_graph()
+    model.map_field_graph_ends()
     # model.draw_field_graph()
     model.fill_in_instances()
 

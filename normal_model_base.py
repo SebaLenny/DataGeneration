@@ -1,3 +1,4 @@
+from base.generator_base import GeneratorBase
 from generators.uniform_distribution_gen import UniformDistributionGen
 from generators.random_relation_gen import RandomRelationGen
 from base.field_base import FieldBase
@@ -18,10 +19,15 @@ class Person:
         self.salary: float = 0
         self.cars: list[Car] = []
 
+
 class Car:
     def __init__(self) -> None:
         self.owner: Person = None
-        self.licence_plate: str = ""
+        self.brand: str = ""
+        self.color: str = ""
+        self.condition: str = ""
+        self.signature: str = ""
+
 
 if __name__ == "__main__":
     model = ModelBase()
@@ -39,11 +45,19 @@ if __name__ == "__main__":
 
     # CAR
     cb_car = ClassBase(model, Car, 100)
-    FieldBase(cb_car, RandomRelationGen(cb_person, reverse_relation_field=p_cars), "owner")
-    FieldBase(cb_car, WeightedPickGenerator(["VW", "Audi", "Seat", "Skoda"]), "licence_plate")
+    FieldBase(cb_car, RandomRelationGen(
+        cb_person, reverse_relation_field=p_cars), "owner")
+    FieldBase(cb_car, WeightedPickGenerator(
+        ["VW", "Audi", "Seat", "Skoda"]), "brand")
+    FieldBase(cb_car, WeightedPickGenerator(
+        ["Red", "Blue", "Yellow", "Green"]), "color", related_fields=["owner.gender"])
+    FieldBase(cb_car, WeightedPickGenerator(
+        ["Good", "Average", "Bad", "Junk"]), "condition", related_fields=["owner.salary"])
+    FieldBase(cb_car, GeneratorBase(), "signature", related_fields=[
+              "owner.first_name", "owner.last_name"])
 
     model.create_instances()
-    model.map_field_graph()
+    model.map_field_graph_full()
     model.draw_field_graph()
     model.fill_in_instances()
     # cb_person.json_dump()

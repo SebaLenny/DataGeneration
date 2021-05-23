@@ -27,12 +27,20 @@ class FieldBase():
     def get_end_fields(self) -> List[FieldBase]:
         end_fields = []
         for related_field in self._related_fields:
-            end_fields.append(self._get_end_field(related_field))
+            field = self._get_fields_chain(related_field)[-1]
+            end_fields.append(field)
         return end_fields
+    
+    def get_chains(self) -> List[List[FieldBase]]:
+        chains = []
+        for related_field in self._related_fields:
+            chains.append(self._get_fields_chain(related_field))
+        return chains
 
-    def _get_end_field(self, related_field):
+    def _get_fields_chain(self, related_field) -> List[FieldBase]:
         split = related_field.split(".")
         class_base = self.class_base
+        fields_chain = []
         for split_field in split:
             field_base_find = [
                 fb for fb in class_base.fields if fb.field == split_field]
@@ -41,10 +49,12 @@ class FieldBase():
                     f"No field {split_field} found in {class_base.reference_class.__name__}\'s class base")
             field_base = field_base_find[0]
             if split_field == split[-1]:
-                return field_base  # end field base found
+                fields_chain.append(field_base)
+                return fields_chain  # end field base found
             if not issubclass(field_base.generator.__class__, generators.relation_generator_base.RelationGeneratorBase):
                 raise Exception(
                     f"{split_field}\'s does not have generator of RelationGeneratorBase sublcass")
+            fields_chain.append(field_base)
             class_base = field_base.generator.related_class
 
     def fill_in_field(self, instance):

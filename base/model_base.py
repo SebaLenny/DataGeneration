@@ -19,7 +19,7 @@ class ModelBase():
         for b_class in self.classes:
             b_class.create_instances(b_class.count)
 
-    def map_field_graph(self):
+    def map_field_graph_ends(self):
         self.fields_graph = nx.DiGraph()
         fields = self.get_all_fields()
         for field in fields:
@@ -29,7 +29,29 @@ class ModelBase():
                 self.fields_graph.add_edge(
                     field.class_field_str(), end_field.class_field_str())
         if not nx.is_directed_acyclic_graph(self.fields_graph):
-            raise Exception("Field relations do not form Directed Acyclic Graph (DAG), check if relations are not forming cycles.")
+            raise Exception(
+                "Field relations do not form Directed Acyclic Graph (DAG), check if relations are not forming cycles.")
+        topological_order = list(
+            reversed(list(nx.topological_sort(self.fields_graph))))
+        for field_key in topological_order:
+            self.reverse_topological_order.append(
+                self.fields_graph.nodes[field_key]['field'])
+
+    def map_field_graph_full(self):
+        self.fields_graph = nx.DiGraph()
+        fields = self.get_all_fields()
+        for field in fields:
+            self.fields_graph.add_node(field.class_field_str(), field=field)
+        for field in fields:
+            for chain in field.get_chains():
+                current_field = field
+                for i in range(len(chain)):
+                    self.fields_graph.add_edge(
+                        current_field.class_field_str(), chain[i].class_field_str())
+                    current_field = chain[i]
+        if not nx.is_directed_acyclic_graph(self.fields_graph):
+            raise Exception(
+                "Field relations do not form Directed Acyclic Graph (DAG), check if relations are not forming cycles.")
         topological_order = list(
             reversed(list(nx.topological_sort(self.fields_graph))))
         for field_key in topological_order:
@@ -50,10 +72,12 @@ class ModelBase():
 
     def fill_in_instances(self):
         for field in self.reverse_topological_order:
-            for instance in field.class_base.instances:
-                field.fill_in_field(instance)
+            if field.generator is not None:
+                for instance in field.class_base.instances:
+                    field.fill_in_field(instance)
 
     def generate_data(self):
         self.create_instances()
-        self.map_field_graph()
+        # self.map_field_graph_ends()
+        self.map_field_graph_full()
         self.fill_in_instances()

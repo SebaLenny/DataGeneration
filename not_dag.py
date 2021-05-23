@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
 
     model.create_instances()
-    model.map_field_graph()
+    model.map_field_graph_full()
     model.draw_field_graph()
     model.fill_in_instances()
     print("")
