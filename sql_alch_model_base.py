@@ -68,7 +68,7 @@ if __name__ == "__main__":
                                 declarative_base=base)
 
     # Company
-    cb_company = ClassBase(model, Company, 5)
+    cb_company = ClassBase(model, Company, count=5)
     FieldBase(cb_company, CompanyNameGenerator(), "name")
     FieldBase(cb_company, UniversalFunctionGenerator(f=fake.city), "city")
     FieldBase(cb_company, UniversalFunctionGenerator(
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     FieldBase(cb_person, WeightedPickGenerator(
         choices=["Male", "Female"], weights=[0.4, 0.6]), "gender")
     FieldBase(
-        cb_person, NormalDistributionGen(mean=3000, std=1500, decimals=2, blank_procentage=.15), "salary")
+        cb_person, NormalDistributionGen(mean=3000, std=1500, decimals=2, blank_percentage=.15), "salary")
     p_cars = FieldBase(cb_person, None, "cars")
     FieldBase(cb_person, RandomRelationGen(
         cb_company), "company")

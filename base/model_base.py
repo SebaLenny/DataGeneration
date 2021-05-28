@@ -43,6 +43,9 @@ class ModelBase():
         for field in fields:
             self.fields_graph.add_node(field.class_field_str(), field=field)
         for field in fields:
+            for v_field in field.virtually_related_fields:
+                self.fields_graph.add_edge(
+                        field.class_field_str(), v_field.class_field_str())                
             for chain in field.get_chains():
                 current_field = field
                 for i in range(len(chain)):
@@ -63,6 +66,10 @@ class ModelBase():
                 node_size=200, node_color="#b5c6ff")
         plt.show()
 
+    def print_rev_topological_order(self):
+        for i, fb in enumerate(self.reverse_topological_order):
+            print(f"{i+1}: {fb.class_field_str()}")
+
     def get_all_fields(self) -> List[FieldBase]:
         fields = []
         for class_base in self.classes:
@@ -78,6 +85,5 @@ class ModelBase():
 
     def generate_data(self):
         self.create_instances()
-        # self.map_field_graph_ends()
         self.map_field_graph_full()
         self.fill_in_instances()

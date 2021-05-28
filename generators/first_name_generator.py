@@ -5,12 +5,12 @@ from faker import Faker
 
 class FirstNameGenerator(GeneratorBase):
     def __init__(self,
-                 blank_procentage: float = 0) -> None:
-        super().__init__(blank_procentage)
+                 blank_percentage: float = 0) -> None:
+        super().__init__(blank_percentage)
         self.fake = Faker()
 
     def generate_data(self, related_fields_values: dict, instance=None):
-        if np.random.rand() < self.blank_procentage:
+        if np.random.rand() < self.blank_percentage:
             return None
         temp = [x for x in related_fields_values.keys() if "gender" in x.lower()]
         if len(temp) > 0:

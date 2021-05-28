@@ -8,11 +8,11 @@ import random
 class RandomRelationGen(RelationGeneratorBase):
     def __init__(self,
                  related_class: ClassBase,
-                 blank_procentage: float = 0,
+                 blank_percentage: float = 0,
                  duplicate_check_chance: float = 0,
                  duplicate_repeats: int = 5,
                  reverse_relation_field: FieldBase = None) -> None:
-        super().__init__(blank_procentage, related_class)
+        super().__init__(blank_percentage, related_class)
         self.duplicate_check_chance: float = duplicate_check_chance
         self.duplicate_repeats = duplicate_repeats
         self.used_relations = {}
@@ -25,7 +25,7 @@ class RandomRelationGen(RelationGeneratorBase):
             self.used_relations[object] = 1
 
     def generate_data(self, related_fields_values: dict = {}, instance=None):
-        if np.random.rand() < self.blank_procentage:
+        if np.random.rand() < self.blank_percentage:
             return None
         instances = self.related_class.instances
         check_chance = np.random.rand()

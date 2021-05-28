@@ -13,7 +13,8 @@ class FieldBase():
                  class_base: ClassBase,
                  generator: GeneratorBase,
                  field: str,
-                 related_fields: list[str] = []) -> None:
+                 related_fields: list[str] = [],
+                 virtually_related_fields: list[FieldBase] = []) -> None:
         self.class_base: ClassBase = class_base
         self.class_base.append_field(self)
         self.generator: GeneratorBase = generator
@@ -23,6 +24,7 @@ class FieldBase():
         for relatd_field in self._related_fields:
             self._related_attrgetters[relatd_field] = operator.attrgetter(
                 relatd_field)
+        self.virtually_related_fields = virtually_related_fields
 
     def get_end_fields(self) -> List[FieldBase]:
         end_fields = []

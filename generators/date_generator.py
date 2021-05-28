@@ -7,13 +7,13 @@ class DateGenerator(GeneratorBase):
     def __init__(self,
                  start_date,
                  end_date,
-                 blank_procentage: float = 0,) -> None:
-        super().__init__(blank_procentage)
+                 blank_percentage: float = 0,) -> None:
+        super().__init__(blank_percentage)
         self.fake = Faker()
         self.start_date = start_date
         self.end_date = end_date
 
     def generate_data(self, related_fields_values: dict, instance=None):
-        if np.random.rand() < self.blank_procentage:
+        if np.random.rand() < self.blank_percentage:
             return None
         return self.fake.date_between(start_date=self.start_date, end_date=self.end_date)
