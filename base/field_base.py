@@ -9,12 +9,25 @@ if TYPE_CHECKING:
 
 
 class FieldBase():
+    """Relates to the field of class to generate data to.
+    Is responsible for generating data using specified Generator
+    """
     def __init__(self,
                  class_base: ClassBase,
                  generator: GeneratorBase,
                  field: str,
                  related_fields: list[str] = [],
                  virtually_related_fields: list[FieldBase] = []) -> None:
+        """Init
+
+        Args:
+            class_base (ClassBase): Reference to ClassBase
+            generator (GeneratorBase): Generator used for generating data
+            field (str): string name of field to generate data to
+            related_fields (list[str], optional): [description]. Defaults to []. List of related fields to be supplied to generator during data generation.
+            Using string notation form the context of current class.
+            virtually_related_fields (list[FieldBase], optional): [description]. Defaults to []. List of related FieldBases (only for organisational purposes).
+        """
         self.class_base: ClassBase = class_base
         self.class_base.append_field(self)
         self.generator: GeneratorBase = generator
@@ -27,6 +40,11 @@ class FieldBase():
         self.virtually_related_fields = virtually_related_fields
 
     def get_end_fields(self) -> List[FieldBase]:
+        """Returns list of FieldBases from related_fields
+
+        Returns:
+            List[FieldBase]: List of FiledBases
+        """
         end_fields = []
         for related_field in self._related_fields:
             field = self._get_fields_chain(related_field)[-1]
@@ -34,6 +52,11 @@ class FieldBase():
         return end_fields
     
     def get_chains(self) -> List[List[FieldBase]]:
+        """Returns list of FieldBases chains that lead to related_fields
+
+        Returns:
+            List[FieldBase]: List of FiledBases
+        """
         chains = []
         for related_field in self._related_fields:
             chains.append(self._get_fields_chain(related_field))
@@ -60,6 +83,11 @@ class FieldBase():
             class_base = field_base.generator.related_class
 
     def fill_in_field(self, instance):
+        """Uses generator to generate data into field of specified instance
+
+        Args:
+            instance ([type]): Instace of class of filed
+        """
         if self.generator is None:
             return
         related_fields_values = {}
@@ -69,11 +97,16 @@ class FieldBase():
                     instance)
             except Exception:
                 related_fields_values[related_field] = None
-        setattr(instance, self.field, self.prepare_field_value(
+        setattr(instance, self.field, self._prepare_field_value(
             related_fields_values, instance))
 
-    def prepare_field_value(self, related_fields_values, instance):
+    def _prepare_field_value(self, related_fields_values, instance):
         return self.generator.generate_data(related_fields_values, instance=instance)
 
-    def class_field_str(self):
+    def class_field_str(self) -> str:
+        """Returns string of format `class_name.field_name`
+
+        Returns:
+            str: String of format `class_name.field_name`
+        """
         return f"{self.class_base.reference_class.__name__}.{self.field}"

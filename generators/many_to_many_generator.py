@@ -7,15 +7,15 @@ import numpy as np
 
 class ManyToManyGenerator(GeneratorBase):
     def __init__(self,
-                 one_to_many_class_base: ClassBase,
                  count: int,
+                 many_to_many_class_base: ClassBase,
+                 to_class_base: ClassBase,
                  self_reference_field: FieldBase,
                  to_reference_field: FieldBase,
-                 to_class_base: ClassBase,
                  reverse_to_reference_field: FieldBase = None,
                  blank_percentage: float = 0) -> None:
         super().__init__(blank_percentage=blank_percentage)
-        self.one_to_many_class_base = one_to_many_class_base
+        self.one_to_many_class_base = many_to_many_class_base
         self.count = count
         self.self_reference_field = self_reference_field
         self.to_reference_field = to_reference_field

@@ -14,11 +14,12 @@ class SqlAlchemyModelBase(ModelBase):
                  port: str,
                  database: str,
                  declarative_base,
-                 driver: str = "") -> None:
+                 driver: str = "",
+                 appendix: str = "") -> None:
         super().__init__()
         self.connection_string = ""
         self.set_connection_string(
-            dialect, username, password, host, port, database, driver)
+            dialect, username, password, host, port, database, driver, appendix)
         self.db = create_engine(self.connection_string)
         self.declarative_base = declarative_base
         self.SessionMaker = sessionmaker(self.db)
@@ -30,10 +31,11 @@ class SqlAlchemyModelBase(ModelBase):
                               host: str,
                               port: str,
                               database: str,
-                              driver: str = "") -> None:
+                              driver: str = "",
+                              appendix: str = "") -> None:
         if driver != "":
             dialect = f"{driver}+{dialect}"
-        self.connection_string = f"{dialect}://{username}:{password}@{host}:{port}/{database}"
+        self.connection_string = f"{dialect}://{username}:{password}@{host}:{port}/{database}{appendix}"
 
     def save_to_db(self):
         session = self.SessionMaker()
