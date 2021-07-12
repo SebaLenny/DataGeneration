@@ -1,19 +1,19 @@
 # DataGeneration
 
-> **⚠ WARNING: this solution is higly experimental and untested, use it on your own risk.**
+> **⚠ WARNING: this solution is highly experimental and untested, use it at your own risk.**
 
-Data generation system designed to work with object data models. System supports dependencies between feelds, relations between classes and generation of various types of data. System was created to be highly customizable as it can be seen throught various extentions examples.
+Data generation system designed to work with object data models. System supports dependencies between fields, relations between classes and generation of various types of data. The system was created to be highly customizable as it can be seen through various extensions examples.
 
 ## TODO
 
-Several things needs to be addressed within this solution, including:
+Several things need to be addressed within this solution, including:
 
 - TESTS!!!
-- Reogranization of files so that it can be tured into package
+- Reorganization of files so that the solution can be turned into package
 - Refactoring and redo of naming within the solution
 - Proper documentation
-- Implementing more generators and other extentions
+- Implementing more generators and other extensions
 - Moving examples somewhere
-- Optimalizations (and maybe paralelization)
+- Optimizations (and maybe parallelization)
 - Docstrings
 - Many others....
