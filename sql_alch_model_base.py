@@ -59,13 +59,14 @@ if __name__ == "__main__":
     # "docker-compose up" the docker-compose.yml file to start database
     fake = Faker()
 
-    model = SqlAlchemyModelBase(dialect="postgresql",
-                                database="datagen",
-                                username="postgres",
-                                password="superpass",
-                                host="localhost",
-                                port="5432",
-                                declarative_base=base)
+    model = SqlAlchemyModelBase(
+        dialect="postgresql",
+        database="datagen",
+        username="postgres",
+        password="superpass",
+        host="localhost",
+        port="5432",
+        declarative_base=base)
 
     # Company
     cb_company = ClassBase(model, Company, count=5)

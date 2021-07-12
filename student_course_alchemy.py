@@ -57,7 +57,8 @@ class Course(base, SerializerMixin):
 
 
 if __name__ == "__main__":
-    # "docker-compose up" the docker-compose.yml file to start database
+    # "docker-compose up" the docker-compose.yml file to start Postgres
+    # create db "university" in Postgres
     fake = Faker()
 
     model = SqlAlchemyModelBase(dialect="postgresql",
@@ -91,25 +92,32 @@ if __name__ == "__main__":
 
     # Enrolment
     cb_enrolment = ClassBase(model, reference_class=Enrolment, count=0)
-    fb_studnet = FieldBase(cb_enrolment, None, "studnet")
+    fb_student = FieldBase(cb_enrolment, None, "student")
     fb_course = FieldBase(cb_enrolment, None, "course")
 
     # Student - enrolments
-    fb_enrolments = FieldBase(cb_student, ManyToManyGenerator(one_to_many_class_base=cb_enrolment,
-                                                              count=10,
-                                                              self_reference_field=fb_studnet,
-                                                              to_reference_field=fb_course,
-                                                              to_class_base=cb_course,
-                                                              reverse_to_reference_field=fb_enrolees), "enrolments")
+    fb_enrolments = FieldBase(
+        class_base=cb_student,
+        generator=ManyToManyGenerator(
+            many_to_many_class_base=cb_enrolment,
+            count=10,
+            self_reference_field=fb_student,
+            to_reference_field=fb_course,
+            to_class_base=cb_course,
+            reverse_to_reference_field=fb_enrolees
+        ),
+        field="enrolments"
+    )
 
-    FieldBase(cb_enrolment,
-              WeightedPickGenerator(
+    FieldBase(class_base=cb_enrolment,
+              generator=WeightedPickGenerator(
                   [2, 3, 3.5, 4, 4.5, 5, 5.5],
                   blank_percentage=.7),
-              "grade", virtually_related_fields=[fb_enrolments])
+              field="grade",
+              virtually_related_fields=[fb_enrolments]
+              )
 
     model.generate_data()
     model.draw_field_graph()
-    model.print_rev_topological_order()
+    model.print_generation_order()
     # model.save_to_db()
-    print("...")

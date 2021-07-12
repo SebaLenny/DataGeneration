@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     model.create_instances()
     model.map_field_graph_full()
-    model.print_rev_topological_order()
+    model.print_generation_order()
     model.draw_field_graph()
     model.fill_in_instances()
     print("")
